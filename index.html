@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .virtual-list {
+      display: flex;
+      overflow-y: auto;
+      width: 400px;
+      border: 1px solid #ccc;
+    }
+    
+    /* 为了产生滚动条，给一个大的高度 */
+    .virtual-list-mg {
+      width: 0;
+    }
+
+    .virtual-list-container {
+      width: 100%;
+    }
+
+    .list-item {
+      line-height: 32px;
+      font-size: 14px;
+      border-bottom: 1px solid #ccc;
+    }
+
+  </style>
+  <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.21/lodash.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h2>虚拟list</h2>
+
+    <virtual-list
+      :item-height="32"
+      :container-height="320"
+      :list="list"
+      item-class="list-item"
+    >
+      <template #default="item">
+        <div>{{item.name}}</div>
+      </template>
+    </virtual-list>
+  </div>
+
+
+  <!-- 虚拟列表的模板 -->
+<template id="virtualListTemp">
+  <div
+      ref="virtualList"
+      class="virtual-list"
+      :style="{
+        height: `${containerHeight}px`
+      }"
+    >
+      <div
+        class="virtual-list-mg"
+        :style="{
+          height:  `${itemHeight * list.length}px`
+        }"
+      ></div>
+
+      <ul
+        class="virtual-list-container"
+        :style="{
+          marginTop: marginTop
+        }"
+      >
+        <li
+          v-for="(item, index) in activeList"
+          :key="index"
+          class="virtual-list-item"
+          :class="itemClass"
+        >
+          <slot
+            v-bind="item"
+          />
+        </li>
+      </ul>
+  </div>
+</template>
+<script src="main.js" type="module"></script>
+</body>
+</html>
