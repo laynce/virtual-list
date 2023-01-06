@@ -37,6 +37,7 @@ export default {
     const scroll = _.throttle(() => {
       const container = virtualList.value
       const num = parseInt(container.scrollTop / props.itemHeight)
+      // marginTop 保证内容一直显示在视区范围内
       marginTop.value = `${num * props.itemHeight}px`
       alreadyScrollNum.value = num
     }, 40)
@@ -56,5 +57,36 @@ export default {
       marginTop,
     }
   },
-  template: '#virtualListTemp'
+  template: `<div
+  ref="virtualList"
+  class="virtual-list"
+  :style="{
+    height: containerHeight + 'px'
+  }"
+>
+  <div
+    class="virtual-list-mg"
+    :style="{
+      height: itemHeight * list.length + 'px'
+    }"
+  />
+
+  <ul
+    class="virtual-list-container"
+    :style="{
+      marginTop: marginTop,
+    }"
+  >
+    <li
+      v-for="(item, index) in activeList"
+      :key="index"
+      class="virtual-list-item"
+      :class="itemClass"
+    >
+      <slot
+        v-bind="item"
+      />
+    </li>
+  </ul>
+</div>`
 }

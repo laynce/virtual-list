@@ -8,7 +8,7 @@ const app = createApp({
 
     for (let i = 0; i < 100; i++) {
       list.push({
-        name: `第${i+1}条`
+        data: `第${i + 1}条`
       })
     }
 
